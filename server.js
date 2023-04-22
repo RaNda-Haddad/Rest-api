@@ -1,60 +1,29 @@
-
-const express=require ('express')
-const app=express()
-const search=require("./config/connectDB")
-
+//Require dotenv
 require("dotenv").config({ path: "./config/.env" });
-// 1//creat server
-   //*** 1.1 run server 
-   //*** 1.2 conntDB (config folder)
-   //*** 1.3 creat Route
-   //*** 1.4 parse Data
 
-   
-//*** 1.2-connect db
-search.connectDB(); 
+//Require connectdb
+const connectDB = require("./config/connectDB");
 
-//3-routes
-app.use(express.json())
-//Create and save User function
+//Require express
+const express = require("express");
 
-search.createSave()
-//Create Many Records with model.create()
-search.createPeoples({name:"ahmed",age:20,favoriteFoods:["brik","keftegi"]},)
+//Get instance from express
+const app = express();
 
-//Find User ByName
+// MiddleWare bodyParser
+app.use(express.json());
 
-search.findByName('ahmed')
-//Find User By ID function
+//require function connectDB
+connectDB();
+app.use("/", require("./Routes/user"));
+app.use("*", (req, res) => {
+  res.send("404 - PAGE NOT FOUND");
+});
 
-search.findById('60e70c7231bbab1b0cab06fe')
-//Find User By Food
-search.findByFood('brik')
-
-//Perform Classic Updates by Running Find, Edit, then Save
-//search.findEdit('60e70c7231bbab1b0cab06fe')
-//Update User
-search.findAndUpdate('ahmed')
-//Delete User
-
-search.removeById('60e70c7231bbab1b0cab06fe')
-
-//Delete All User
-
-search.removePeoples('brik')
-
-//Get Specific user
-
-//search.queryChain()
-
-
-
-
-
-//*** 1.1 run
-const PORT = process.env.PORT || process.env.port;
-app.listen(PORT, err => {
-    err
-        ? console.log(err)
-        : console.log(`the server is running on http://localhost:${PORT}`)
-})
+//listen to the port
+const PORT = process.env.PORT;
+app.listen(PORT, (err) => {
+  err
+    ? console.log("err=", err)
+    : console.log(`Server running on port ${PORT}`);
+});
