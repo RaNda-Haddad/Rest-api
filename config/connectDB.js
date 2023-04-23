@@ -1,15 +1,13 @@
-//Require mongoose
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-// Connect DB function
-const connect = async () => {
-    try {
-        await mongoose.connect(process.env.DB_URI)
-        console.log('Connected to DataBase.....')
-    } catch (error) {
-      console.log(error)  
-    }
-}
+const connectDB = async () => {
+  try {
+    mongoose.set("strictQuery", false);
+    await mongoose.connect(process.env.DB_URI, {useNewUrlParser: true});
+    console.log("DataBase is connected...");
+  } catch (error) {
+    console.log("can not conenct to DB!!!", error);
+  }
+};
 
-//export 
-module.exports = connect
+module.exports = connectDB;
